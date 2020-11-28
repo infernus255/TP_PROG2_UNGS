@@ -34,6 +34,10 @@ public class Medico {
 	 public Integer obtenerMatricula() {
 	  return nroMatricula;
 	 }
+	 public String obtenerNombre() {
+		 return nombre;
+	 }
+	 
 	/* private boolean validarMatricula(Medico medico) {
 	  if (nroMatriculaespecialidad<0) {
 	   return false;
