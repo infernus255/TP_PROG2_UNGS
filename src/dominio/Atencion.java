@@ -1,4 +1,4 @@
-package trabajopractico;
+package dominio;
 
 public abstract class Atencion {
 	protected float importe;

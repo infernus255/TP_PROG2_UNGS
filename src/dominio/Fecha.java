@@ -1,4 +1,4 @@
-package trabajopractico;
+package dominio;
 
 public class Fecha {
 	

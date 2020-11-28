@@ -1,4 +1,4 @@
-package trabajopractico;
+package dominio;
 
 import java.util.HashMap;
 
