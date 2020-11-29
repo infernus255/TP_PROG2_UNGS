@@ -9,4 +9,8 @@ public class Consultorio extends Atencion {
 		this.nombreMedico = nombreMedico;
 		this.especialidad = especialidad;
 	}
+
+	public String obtenerEspecialidad() {
+		return especialidad;
+	}
 }

@@ -8,4 +8,8 @@ public class Atencion {
 		this.importe = importe;
 		this.fecha = fecha;
 	}
+
+	public Fecha obtenerFecha() {
+		return fecha;
+	}
 }

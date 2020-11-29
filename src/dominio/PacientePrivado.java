@@ -1,6 +1,7 @@
 package dominio;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class PacientePrivado extends Paciente {
 	private HashMap<Fecha, Atencion> atenciones;
@@ -28,5 +29,24 @@ public class PacientePrivado extends Paciente {
 			return true;
 		}
 		return false;
+	}
+
+	public Map<Fecha, String> obtenerAtencionesConsultorio() {
+		Map<Fecha, String> atencionesConsultorio = new HashMap<Fecha, String>();
+		for (Atencion atencion : atenciones.values()) {
+			if (validarClaseAtencion(atencion, "Consultorio")) {
+				Consultorio consultorio = (Consultorio) atencion;
+				atencionesConsultorio.put(consultorio.obtenerFecha(), consultorio.obtenerEspecialidad());
+			}
+		}
+		return atencionesConsultorio;
+	}
+
+	private boolean validarClaseAtencion(Atencion atencion, String tipo) {
+		if (atencion.getClass().getSimpleName().equals(tipo)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
