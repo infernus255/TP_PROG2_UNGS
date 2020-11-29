@@ -135,7 +135,7 @@ public class CentroMedico {
 	}
 
 	// atencion internacion
-	public boolean agregarAtencion(Integer historiaClinica, String area, Fecha fechaIngreso) {
+	public boolean agregarAtencion(Integer historiaClinica, String area, Fecha fechaIngreso) throws Exception {
 		if (!pacientes.containsKey(historiaClinica)) {
 			if (validarClasePaciente(pacientes.get(historiaClinica), "PacienteObraSocial")) {
 				PacienteObraSocial paciente = (PacienteObraSocial) pacientes.get(historiaClinica);
@@ -143,7 +143,7 @@ public class CentroMedico {
 				return paciente.agregarInternacion(area, fechaIngreso, costoDiaInternacion, obtenerHabitacionVacia());
 			}
 		}
-		return false; 
+		return false;
 	}
 
 	public boolean altaInternacion(Integer historiaClinica, Fecha fechaAlta) throws ParseException {
