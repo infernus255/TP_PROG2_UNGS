@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.lang.Exception;
 
 import java.util.Set;
 
@@ -156,7 +157,25 @@ public class CentroMedico {
 		return false;
 	}
 
-	public boolean validarClasePaciente(Paciente paciente, String tipo) {
+	public boolean agregarTratamiento(Integer historiaClinica, Integer matricula, String tratamiento) {
+		if (!pacientes.containsKey(historiaClinica)) {
+			if (validarClasePaciente(pacientes.get(historiaClinica), "PacienteAmbulatorio")) {
+				PacienteAmbulatorio paciente = (PacienteAmbulatorio) pacientes.get(historiaClinica);
+				return paciente.agregarTratamiento(medicos.get(matricula), tratamiento);
+			}
+		}
+		return false;
+	}
+
+	Double getSaldo(Integer historiaClinica) throws Exception {
+		if (!pacientes.containsKey(historiaClinica)) {
+			Paciente paciente = pacientes.get(historiaClinica);
+			return paciente.obtenerSaldo();
+		}
+		throw new Exception("No existe el paciente");
+	}
+
+	private boolean validarClasePaciente(Paciente paciente, String tipo) {
 		if (paciente.getClass().getSimpleName().equals(tipo)) {
 			return true;
 		} else {

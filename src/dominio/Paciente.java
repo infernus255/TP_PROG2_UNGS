@@ -1,11 +1,14 @@
 package dominio;
 
-import java.util.HashMap;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.util.Date;
 
 public abstract class Paciente {
 	protected int nroHistoriaClinica;
 	protected Fecha nacimiento;
 	protected String nombre;
+	protected Double saldo;
 
 	@Override
 	public boolean equals(Object obj) {
@@ -33,19 +36,26 @@ public abstract class Paciente {
 		this.nroHistoriaClinica = nroHistoriaClinica;
 		this.nacimiento = nacimiento;
 		this.nombre = nombre;
+		this.saldo = 0.0;
 
 	}
 
-	public int obtenerNroHistoriaClinica() {
-		return this.nroHistoriaClinica;
+	public Integer obtenerNroHistoriaClinica() {
+		return nroHistoriaClinica;
 	}
 
-	public int obtenerFecha() {
-		return this.nroHistoriaClinica;
+	public Fecha obtenerFechaNacimiento() {
+		return nacimiento;
 	}
 
-	public Fecha obtenerEdad() {
-		return this.nacimiento;
+	public Integer obtenerEdad() throws ParseException {
+		LocalDate fechaAux = LocalDate.now();
+		Fecha fechaActual = new Fecha(fechaAux.getDayOfMonth(), fechaAux.getMonthValue(), fechaAux.getYear());
+		return nacimiento.obtenerDias(fechaActual) / 365;
 	}
+
+	public abstract double obtenerSaldo();
+
+	public abstract boolean pagarSaldo();
 
 }
