@@ -54,8 +54,12 @@ public abstract class Paciente {
 		return nacimiento.obtenerDias(fechaActual) / 365;
 	}
 
-	public abstract double obtenerSaldo();
+	public double obtenerSaldo() {
+		return saldo;
+	}
 
-	public abstract boolean pagarSaldo();
+	public void pagarSaldo() {
+		saldo = 0.0;
+	};
 
 }

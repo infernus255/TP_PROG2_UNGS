@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.lang.Exception;
@@ -85,7 +86,7 @@ public class CentroMedico {
 
 	// atencion consultorio
 	public boolean agregarAtencion(Integer historiaClinica, Fecha fecha, Integer matricula) {
-		if (!pacientes.containsKey(historiaClinica)) {
+		if (pacientes.containsKey(historiaClinica)) {
 			if (validarClasePaciente(pacientes.get(historiaClinica), "PacientePrivado")) {
 				PacientePrivado paciente = (PacientePrivado) pacientes.get(historiaClinica);
 				if (!medicos.containsKey(matricula)) {
@@ -99,7 +100,7 @@ public class CentroMedico {
 
 	// atencion guardia
 	public boolean agregarAtencion(Integer historiaClinica, Fecha fecha) {
-		if (!pacientes.containsKey(historiaClinica)) {
+		if (pacientes.containsKey(historiaClinica)) {
 			if (validarClasePaciente(pacientes.get(historiaClinica), "PacientePrivado")) {
 				PacientePrivado paciente = (PacientePrivado) pacientes.get(historiaClinica);
 				return paciente.agregarAtencionGuardia(fecha);
@@ -137,7 +138,7 @@ public class CentroMedico {
 
 	// atencion internacion
 	public boolean agregarAtencion(Integer historiaClinica, String area, Fecha fechaIngreso) throws Exception {
-		if (!pacientes.containsKey(historiaClinica)) {
+		if (pacientes.containsKey(historiaClinica)) {
 			if (validarClasePaciente(pacientes.get(historiaClinica), "PacienteObraSocial")) {
 				PacienteObraSocial paciente = (PacienteObraSocial) pacientes.get(historiaClinica);
 
@@ -148,7 +149,7 @@ public class CentroMedico {
 	}
 
 	public boolean altaInternacion(Integer historiaClinica, Fecha fechaAlta) throws ParseException {
-		if (!pacientes.containsKey(historiaClinica)) {
+		if (pacientes.containsKey(historiaClinica)) {
 			if (validarClasePaciente(pacientes.get(historiaClinica), "PacienteObraSocial")) {
 				PacienteObraSocial paciente = (PacienteObraSocial) pacientes.get(historiaClinica);
 				return paciente.darAlta(fechaAlta);
@@ -158,7 +159,7 @@ public class CentroMedico {
 	}
 
 	public boolean agregarTratamiento(Integer historiaClinica, Integer matricula, String tratamiento) {
-		if (!pacientes.containsKey(historiaClinica)) {
+		if (pacientes.containsKey(historiaClinica)) {
 			if (validarClasePaciente(pacientes.get(historiaClinica), "PacienteAmbulatorio")) {
 				PacienteAmbulatorio paciente = (PacienteAmbulatorio) pacientes.get(historiaClinica);
 				return paciente.agregarTratamiento(medicos.get(matricula), tratamiento);
@@ -167,12 +168,45 @@ public class CentroMedico {
 		return false;
 	}
 
-	Double getSaldo(Integer historiaClinica) throws Exception {
+	public Double getSaldo(Integer historiaClinica) throws Exception {
 		if (!pacientes.containsKey(historiaClinica)) {
 			Paciente paciente = pacientes.get(historiaClinica);
 			return paciente.obtenerSaldo();
 		}
 		throw new Exception("No existe el paciente");
+	}
+
+	public void pagarSaldo(Integer historiaClinica) throws Exception {
+		if (!pacientes.containsKey(historiaClinica)) {
+			Paciente paciente = pacientes.get(historiaClinica);
+			paciente.pagarSaldo();
+		}
+		throw new Exception("No existe el paciente");
+	}
+
+	public List<Integer> listaInternacion() throws Exception {
+		if (pacientes.isEmpty()) {
+			throw new Exception("no hay pacientes");
+		}
+		List<Integer> list = new ArrayList<Integer>();
+		for (Paciente paciente : pacientes.values()) {
+			if (validarClasePaciente(paciente, "PacienteObraSocial")) {
+				PacienteObraSocial pacienteOS = (PacienteObraSocial) paciente;
+				if (pacienteOS.hayInternacionActiva()) {
+					list.add(paciente.nroHistoriaClinica);
+				}
+			}
+		}
+		return list;
+	}
+
+	// <fecha,especialidad>
+	public Map<Fecha, String> atencionesEnConsultorio(Integer historiaClinica) {
+		if (pacientes.containsKey(historiaClinica)) {
+			if (validarClasePaciente(pacientes.get(historiaClinica), "PacienteAmbulatorio")) {
+
+			}
+		}
 	}
 
 	private boolean validarClasePaciente(Paciente paciente, String tipo) {
@@ -182,4 +216,6 @@ public class CentroMedico {
 			return false;
 		}
 	}
+
+	// AGREGAR VALIDACION EXISTENCIA DE COLECCIONES EN LOS METODOS
 }

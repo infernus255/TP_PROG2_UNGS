@@ -18,7 +18,7 @@ public class Medico {
 	 * private boolean validarHonorarios(Medico medico) { if(medico.honorarios <=0)
 	 * { return false; } else { return true; } }
 	 */
-	public double obtenerHonorarios() {
+	public Double obtenerHonorarios() {
 		return honorarios;
 	}
 

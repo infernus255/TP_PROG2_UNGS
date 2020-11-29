@@ -15,14 +15,17 @@ public class PacientePrivado extends Paciente {
 			Consultorio consulta = new Consultorio(medico.obtenerHonorarios(), fecha, medico.obtenerNombre(),
 					medico.obtenerEspecialidad());
 			atenciones.put(fecha, consulta);
+			saldo = saldo + consulta.importe;
+			return true;
 		}
 		return false;
 	}
 
 	public boolean agregarAtencionGuardia(Fecha fecha) {
 		if (!atenciones.containsKey(fecha)) {
-			Atencion atencion = new Atencion(0.0,fecha);
+			Atencion atencion = new Atencion(0.0, fecha);
 			atenciones.put(fecha, atencion);
+			return true;
 		}
 		return false;
 	}

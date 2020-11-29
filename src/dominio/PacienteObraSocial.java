@@ -2,7 +2,9 @@ package dominio;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class PacienteObraSocial extends Paciente {
 	private String obraSocial;
@@ -31,7 +33,7 @@ public class PacienteObraSocial extends Paciente {
 	}
 
 	// o(1)
-	private boolean hayInternacionActiva() {
+	public boolean hayInternacionActiva() {
 		return internaciones.getLast().obtenerFechaAlta() == null;
 	}
 
@@ -58,7 +60,7 @@ public class PacienteObraSocial extends Paciente {
 				Double costoAlta = descuento * ultimaInternacion.obtenerFechaIngreso().obtenerDias(fechaAlta)
 						* ultimaInternacion.obtenerImporte();
 				ultimaInternacion.agregarImporte(costoAlta);
-
+				saldo = saldo + costoAlta;
 				return true;
 			}
 		}

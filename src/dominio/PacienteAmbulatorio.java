@@ -18,12 +18,14 @@ public class PacienteAmbulatorio extends Paciente {
 			if (tratamientos.containsKey(medico)) {
 				HashSet<String> tratamientosXMedico = tratamientos.get(medico);
 				if (!tratamientosXMedico.contains(tratamiento)) {
+					saldo = saldo + medico.obtenerHonorarios();
 					return tratamientosXMedico.add(tratamiento);
 				}
 			} else {
 				HashSet<String> tratamientosXMedicoNew = new HashSet<String>();
 				tratamientosXMedicoNew.add(tratamiento);
 				tratamientos.put(medico, tratamientosXMedicoNew);
+				saldo = saldo + medico.obtenerHonorarios();
 				return true;
 			}
 		}
