@@ -67,6 +67,17 @@ public class PacienteObraSocial extends Paciente {
 		return false;
 	}
 
+	public void pagarSaldo() throws Exception {
+		if (!internaciones.isEmpty()) {
+			for (Internacion internacion : internaciones) {
+				if (internacion.obtenerFechaAlta() != null)
+					internacion.pagar();
+			}
+			saldo = 0.0;
+		}
+		throw new Exception("No hay atenciones para pagar");
+	}
+
 	// al pagar hay que dar el alta
 
 }

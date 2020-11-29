@@ -58,8 +58,6 @@ public abstract class Paciente {
 		return saldo;
 	}
 
-	public void pagarSaldo() {
-		saldo = 0.0;
-	};
+	public abstract void pagarSaldo() throws Exception;
 
 }

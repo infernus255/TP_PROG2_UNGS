@@ -49,4 +49,14 @@ public class PacientePrivado extends Paciente {
 			return false;
 		}
 	}
+
+	public void pagarSaldo() throws Exception {
+		if (!atenciones.isEmpty()) {
+			for (Atencion atencion : atenciones.values()) {
+				atencion.pagar();
+			}
+			saldo = 0.0;
+		}
+		throw new Exception("No hay atenciones para pagar");
+	}
 }

@@ -6,10 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.lang.Exception;
-
-import java.util.Set;
 
 public class CentroMedico {
 
@@ -202,11 +199,14 @@ public class CentroMedico {
 
 	// <fecha,especialidad>
 	public Map<Fecha, String> atencionesEnConsultorio(Integer historiaClinica) {
+		Map<Fecha, String> atencionesConsultorio = new HashMap<Fecha, String>();
 		if (pacientes.containsKey(historiaClinica)) {
 			if (validarClasePaciente(pacientes.get(historiaClinica), "PacienteAmbulatorio")) {
-
+				PacientePrivado paciente = (PacientePrivado) pacientes.get(historiaClinica);
+				atencionesConsultorio = paciente.obtenerAtencionesConsultorio();
 			}
 		}
+		return atencionesConsultorio;
 	}
 
 	private boolean validarClasePaciente(Paciente paciente, String tipo) {
