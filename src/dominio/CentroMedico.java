@@ -1,5 +1,6 @@
 package dominio;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,7 +15,7 @@ public class CentroMedico {
 	private HashMap<String, Double> especialidades;
 	private HashMap<Integer, Paciente> pacientes;
 	private HashMap<String, Double> obrasSociales;
-	private HashMap<Integer,Boolean> habitaciones;
+	private HashMap<Integer, Boolean> habitaciones;
 	// validar los descuentos entre 1 y 99
 
 	private Integer cuit;
@@ -30,6 +31,7 @@ public class CentroMedico {
 		pacientes = new HashMap<Integer, Paciente>();
 		especialidades = new HashMap<String, Double>();
 		obrasSociales = new HashMap<String, Double>();
+		crearHabitaciones(100);
 	}
 
 	public boolean agregarEspecialidad(String nombre, Double valor) {
@@ -73,81 +75,87 @@ public class CentroMedico {
 		if (!pacientes.containsKey(historiaClinica)) {
 			// si existe se actualiza si no, lo agrega
 			obrasSociales.put(obraSocial, descuento);
-			PacienteObraSocial paciente = new PacienteObraSocial(nombre, historiaClinica, nac, obraSocial,descuento);
+			PacienteObraSocial paciente = new PacienteObraSocial(nombre, historiaClinica, nac, obraSocial, descuento);
 			pacientes.put(historiaClinica, paciente);
 			return true;
 		}
 		return false;
 	}
 
-//atencion consultorio
+	// atencion consultorio
 	public boolean agregarAtencion(Integer historiaClinica, Fecha fecha, Integer matricula) {
 		if (!pacientes.containsKey(historiaClinica)) {
 			if (validarClasePaciente(pacientes.get(historiaClinica), "PacientePrivado")) {
 				PacientePrivado paciente = (PacientePrivado) pacientes.get(historiaClinica);
 				if (!medicos.containsKey(matricula)) {
 					Medico medico = medicos.get(matricula);
-					return paciente.agregarAtencionConsultorio(fecha, medico);		
+					return paciente.agregarAtencionConsultorio(fecha, medico);
 				}
 			}
 		}
 		return false;
 	}
 
-	//atencion guardia
-		public boolean agregarAtencion(Integer historiaClinica, Fecha fecha) {
-			if (!pacientes.containsKey(historiaClinica)) {
-				if (validarClasePaciente(pacientes.get(historiaClinica), "PacientePrivado")) {
-					PacientePrivado paciente = (PacientePrivado) pacientes.get(historiaClinica);
-						return paciente.agregarAtencionGuardia(fecha);		
-				}
+	// atencion guardia
+	public boolean agregarAtencion(Integer historiaClinica, Fecha fecha) {
+		if (!pacientes.containsKey(historiaClinica)) {
+			if (validarClasePaciente(pacientes.get(historiaClinica), "PacientePrivado")) {
+				PacientePrivado paciente = (PacientePrivado) pacientes.get(historiaClinica);
+				return paciente.agregarAtencionGuardia(fecha);
 			}
-			return false;
 		}
-		
-		private void crearHabitaciones(Integer cantidad) {
-			 if(habitaciones.isEmpty()) {
-				   for(int i=1;i<cantidad ; i++) {
-				    habitaciones.put(i,false);
-				    i++;
-				   }
-				  }
-		}
-		
-		private Integer obtenerHabitacionVacia() throws Exception {
-				if(habitaciones.containsValue(false) && !habitaciones.isEmpty() ) {
-					Integer cont=0;
-					Iterator iterator = habitaciones.values().iterator();
-					while(iterator.hasNext()) {
-						cont++;
-						if((Boolean)iterator.next()==false) {
-							break;
-						};
-					}
-					return cont;
-				}
-				else {
-					throw new Exception("No hay habitaciones vacias o esta vacio");
-				}
+		return false;
+	}
 
-		}
-		
-	//atencion internacion
-		public boolean agregarAtencion(Integer historiaClinica,String area, Fecha fechaIngreso) {
-			if (!pacientes.containsKey(historiaClinica)) {
-				if (validarClasePaciente(pacientes.get(historiaClinica), "PacienteObraSocial")) {
-					PacienteObraSocial paciente = (PacienteObraSocial) pacientes.get(historiaClinica);
-						
-					return paciente.agregarInternacion(area,
-							fechaIngreso,
-							costoDiaInternacion,
-							obtenerHabitacionVacia();
-							);		
-				}
+	private void crearHabitaciones(Integer cantidad) {
+		if (habitaciones.isEmpty()) {
+			for (int i = 1; i < cantidad; i++) {
+				habitaciones.put(i, false);
+				i++;
 			}
-			return false;
 		}
-		
+	}
+
+	private Integer obtenerHabitacionVacia() throws Exception {
+		if (habitaciones.containsValue(false) && !habitaciones.isEmpty()) {
+			Integer cont = 0;
+			Iterator<Boolean> iterator = habitaciones.values().iterator();
+			while (iterator.hasNext()) {
+				cont++;
+				if ((Boolean) iterator.next() == false) {
+					break;
+				}
+				;
+			}
+			return cont;
+		} else {
+			throw new Exception("No hay habitaciones vacias o esta vacio");
+		}
+
+	}
+
+	// atencion internacion
+	public boolean agregarAtencion(Integer historiaClinica, String area, Fecha fechaIngreso) {
+		if (!pacientes.containsKey(historiaClinica)) {
+			if (validarClasePaciente(pacientes.get(historiaClinica), "PacienteObraSocial")) {
+				PacienteObraSocial paciente = (PacienteObraSocial) pacientes.get(historiaClinica);
+
+				return paciente.agregarInternacion(area, fechaIngreso, costoDiaInternacion, obtenerHabitacionVacia());
+			}
+		}
+		return false; 
+	}
+
+	public boolean altaInternacion(Integer historiaClinica, Fecha fechaAlta) throws ParseException {
+		if (!pacientes.containsKey(historiaClinica)) {
+			if (validarClasePaciente(pacientes.get(historiaClinica), "PacienteObraSocial")) {
+				PacienteObraSocial paciente = (PacienteObraSocial) pacientes.get(historiaClinica);
+				return paciente.darAlta(fechaAlta);
+			}
+		}
+		return false;
+	}
+
 	public boolean validarClasePaciente(Paciente paciente, String tipo) {
 		if (paciente.getClass().getSimpleName().equals(tipo)) {
 			return true;
@@ -155,52 +163,4 @@ public class CentroMedico {
 			return false;
 		}
 	}
-
-	/*
-	 * public boolean agregarAtencion(int historiaClinica,Fecha fecha,int
-	 * matricula){ AtencionConsultorio atencion= new
-	 * AtencionConsultorio(historiaClinica,fecha,matricula); double
-	 * preciohonorarios=medicos.get(matricula).obtenerhonorarios();
-	 * 
-	 * atencion.sumarimporte(preciohonorarios); if(pacientes.get(historiaClinica)
-	 * instanceof Privado){
-	 * pacientes.get(historiaClinica).agregarAtencionpaciente(atencion);
-	 * 
-	 * return true; } return false;}
-	 */
-
-	/*
-	 * String nombre; int historiaClinica; Fecha nac; String ObraSocial; int
-	 * descuento;
-	 */
-	// centro.agregarPacienteObraSocial("Carlos", 222, new Fecha(15,1,1940), "Pami",
-// 0.3);
-
-	/*
-	 * public void agregarPacienteObraSocial(String nombre, int historiaClinica,
-	 * Fecha nac, String osocial, double p){ if
-	 * (!pacientes.containsKey(historiaClinica)){ Obrasocial paciente=new
-	 * Obrasocial(nombre,historiaClinica,nac);
-	 * pacientes.put(historiaClinica,paciente); return true; } return false; } }
-	 */
-
-	// atenci�n en consultorio.
-
-	/*
-	 * public boolean agregarAtencion(int historiaClinica, Fecha fecha) { //atencion
-	 * por guardia Guardia guardia = new Guardia(historiaClinica,fecha); int
-	 * precio=0; if(pacientes.get(historiaClinica) instanceof PacientePrivado) {
-	 * pacientes.put(F, atenciones); return true; } else { return false; } }
-	 */
-	public boolean agregarInternacion(int historiaClinica, String area, Fecha fingreso) {
-		// void agregarInternacion(int historiaClinica, String area, Fecha fingreso)
-		Internacion internacion = new Internacion(historiaClinica, area, fingreso);
-		if (pacientes.get(historiaClinica) instanceof PacienteObraSocial) {
-			pacientes.get(historiaClinica).agregarInternacion(historiaClinica, area, fingreso);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 }
