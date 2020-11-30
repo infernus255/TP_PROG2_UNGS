@@ -11,9 +11,9 @@ public class PacientePrivado extends Paciente {
 		atenciones = new HashMap<Fecha, Atencion>();
 	}
 
-	public boolean agregarAtencionConsultorio(Fecha fecha, Medico medico) {
+	public boolean agregarAtencionConsultorio(Fecha fecha, Medico medico,Double importe) {
 		if (!atenciones.containsKey(fecha)) {
-			Consultorio consulta = new Consultorio(medico.obtenerHonorarios(), fecha, medico.obtenerNombre(),
+			Consultorio consulta = new Consultorio(importe, fecha, medico.obtenerNombre(),
 					medico.obtenerEspecialidad());
 			atenciones.put(fecha, consulta);
 			saldo = saldo + consulta.obtenerImporte();

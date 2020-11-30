@@ -30,7 +30,7 @@ public class CentroMedico {
 		pacientes = new HashMap<Integer, Paciente>();
 		especialidades = new HashMap<String, Double>();
 		obrasSociales = new HashMap<String, Double>();
-		habitaciones=new HashMap<Integer, Boolean>();
+		habitaciones = new HashMap<Integer, Boolean>();
 		crearHabitaciones(100);
 	}
 
@@ -89,7 +89,10 @@ public class CentroMedico {
 				PacientePrivado paciente = (PacientePrivado) pacientes.get(historiaClinica);
 				if (medicos.containsKey(matricula)) {
 					Medico medico = medicos.get(matricula);
-					return paciente.agregarAtencionConsultorio(fecha, medico);
+					if (especialidades.containsKey(medico.obtenerEspecialidad())) {
+						Double importe = especialidades.get(medico.obtenerEspecialidad());
+						return paciente.agregarAtencionConsultorio(fecha, medico, importe);
+					}
 				}
 			}
 		}
@@ -108,16 +111,16 @@ public class CentroMedico {
 	}
 
 	private void crearHabitaciones(Integer cantidad) throws Exception {
-	try {
-		if (habitaciones.isEmpty()) {
-			for (int i = 1; i < cantidad; i++) {
-				habitaciones.put(i, false);
-				i++;
+		try {
+			if (habitaciones.isEmpty()) {
+				for (int i = 1; i < cantidad; i++) {
+					habitaciones.put(i, false);
+					i++;
+				}
 			}
+		} catch (Exception e) {
+			throw new Exception("fallo al crear habitaciones");
 		}
-	} catch (Exception e) {
-		throw new Exception("fallo al crear habitaciones");
-	}
 
 	}
 
@@ -183,8 +186,7 @@ public class CentroMedico {
 		if (pacientes.containsKey(historiaClinica)) {
 			Paciente paciente = pacientes.get(historiaClinica);
 			paciente.pagarSaldo();
-		}
-		else {
+		} else {
 			throw new Exception("No existe el paciente");
 		}
 	}

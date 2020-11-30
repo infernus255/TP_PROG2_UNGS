@@ -58,7 +58,7 @@ public class TestCentro {
 
 	 @Test
 	 public void testSaldoPacientePrivado() throws Exception {
-	  assertEquals(50000,ctro.getSaldo(321),10);
+	  assertEquals(5000,ctro.getSaldo(321),10);
 	  ctro.pagarSaldo(321);
 	  assertEquals(0.0,ctro.getSaldo(321),1);
 	 }
