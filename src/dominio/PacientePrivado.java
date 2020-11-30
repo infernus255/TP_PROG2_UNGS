@@ -16,7 +16,7 @@ public class PacientePrivado extends Paciente {
 			Consultorio consulta = new Consultorio(medico.obtenerHonorarios(), fecha, medico.obtenerNombre(),
 					medico.obtenerEspecialidad());
 			atenciones.put(fecha, consulta);
-			saldo = saldo + consulta.importe;
+			saldo = saldo + consulta.obtenerImporte();
 			return true;
 		}
 		return false;
@@ -57,6 +57,8 @@ public class PacientePrivado extends Paciente {
 			}
 			saldo = 0.0;
 		}
-		throw new Exception("No hay atenciones para pagar");
+		else {
+			throw new Exception("No hay atenciones para pagar");
+		}
 	}
 }

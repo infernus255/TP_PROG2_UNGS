@@ -22,7 +22,7 @@ public class Internacion extends Atencion {
 	}
 
 	public Fecha obtenerFechaIngreso() {
-		return fechaAlta;
+		return fecha;
 	}
 
 	public void agregarFechaAlta(Fecha fechaAlta) {

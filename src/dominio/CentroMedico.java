@@ -17,11 +17,11 @@ public class CentroMedico {
 	private HashMap<Integer, Boolean> habitaciones;
 	// validar los descuentos entre 1 y 99
 
-	private Integer cuit;
+	private String cuit;
 	private String nombre;
 	private Double costoDiaInternacion;
 
-	public CentroMedico(String nombre, Integer cuit, Double costoDiaInternacion) {
+	public CentroMedico(String nombre, String cuit, Double costoDiaInternacion) throws Exception {
 		this.cuit = cuit;
 		this.nombre = nombre;
 		this.costoDiaInternacion = costoDiaInternacion;
@@ -30,6 +30,7 @@ public class CentroMedico {
 		pacientes = new HashMap<Integer, Paciente>();
 		especialidades = new HashMap<String, Double>();
 		obrasSociales = new HashMap<String, Double>();
+		habitaciones=new HashMap<Integer, Boolean>();
 		crearHabitaciones(100);
 	}
 
@@ -86,7 +87,7 @@ public class CentroMedico {
 		if (pacientes.containsKey(historiaClinica)) {
 			if (validarClasePaciente(pacientes.get(historiaClinica), "PacientePrivado")) {
 				PacientePrivado paciente = (PacientePrivado) pacientes.get(historiaClinica);
-				if (!medicos.containsKey(matricula)) {
+				if (medicos.containsKey(matricula)) {
 					Medico medico = medicos.get(matricula);
 					return paciente.agregarAtencionConsultorio(fecha, medico);
 				}
@@ -106,13 +107,18 @@ public class CentroMedico {
 		return false;
 	}
 
-	private void crearHabitaciones(Integer cantidad) {
+	private void crearHabitaciones(Integer cantidad) throws Exception {
+	try {
 		if (habitaciones.isEmpty()) {
 			for (int i = 1; i < cantidad; i++) {
 				habitaciones.put(i, false);
 				i++;
 			}
 		}
+	} catch (Exception e) {
+		throw new Exception("fallo al crear habitaciones");
+	}
+
 	}
 
 	private Integer obtenerHabitacionVacia() throws Exception {
@@ -134,7 +140,7 @@ public class CentroMedico {
 	}
 
 	// atencion internacion
-	public boolean agregarAtencion(Integer historiaClinica, String area, Fecha fechaIngreso) throws Exception {
+	public boolean agregarInternacion(Integer historiaClinica, String area, Fecha fechaIngreso) throws Exception {
 		if (pacientes.containsKey(historiaClinica)) {
 			if (validarClasePaciente(pacientes.get(historiaClinica), "PacienteObraSocial")) {
 				PacienteObraSocial paciente = (PacienteObraSocial) pacientes.get(historiaClinica);
@@ -166,7 +172,7 @@ public class CentroMedico {
 	}
 
 	public Double getSaldo(Integer historiaClinica) throws Exception {
-		if (!pacientes.containsKey(historiaClinica)) {
+		if (pacientes.containsKey(historiaClinica)) {
 			Paciente paciente = pacientes.get(historiaClinica);
 			return paciente.obtenerSaldo();
 		}
@@ -174,11 +180,13 @@ public class CentroMedico {
 	}
 
 	public void pagarSaldo(Integer historiaClinica) throws Exception {
-		if (!pacientes.containsKey(historiaClinica)) {
+		if (pacientes.containsKey(historiaClinica)) {
 			Paciente paciente = pacientes.get(historiaClinica);
 			paciente.pagarSaldo();
 		}
-		throw new Exception("No existe el paciente");
+		else {
+			throw new Exception("No existe el paciente");
+		}
 	}
 
 	public List<Integer> listaInternacion() throws Exception {
@@ -201,7 +209,7 @@ public class CentroMedico {
 	public Map<Fecha, String> atencionesEnConsultorio(Integer historiaClinica) {
 		Map<Fecha, String> atencionesConsultorio = new HashMap<Fecha, String>();
 		if (pacientes.containsKey(historiaClinica)) {
-			if (validarClasePaciente(pacientes.get(historiaClinica), "PacienteAmbulatorio")) {
+			if (validarClasePaciente(pacientes.get(historiaClinica), "PacientePrivado")) {
 				PacientePrivado paciente = (PacientePrivado) pacientes.get(historiaClinica);
 				atencionesConsultorio = paciente.obtenerAtencionesConsultorio();
 			}

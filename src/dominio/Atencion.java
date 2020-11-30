@@ -10,12 +10,16 @@ public class Atencion {
 		this.fecha = fecha;
 		pagado = false;
 	}
+	
+	public Double obtenerImporte() {
+		return importe;
+	}
 
 	public Fecha obtenerFecha() {
 		return fecha;
 	}
 
 	public Boolean pagar() {
-		pagado = true;
+		return pagado = true;
 	}
 }

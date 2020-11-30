@@ -1,7 +1,6 @@
 package dominio;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class PacienteAmbulatorio extends Paciente {
 
@@ -14,7 +13,6 @@ public class PacienteAmbulatorio extends Paciente {
 	}
 
 	public boolean agregarTratamiento(Medico medico, String tratamiento) {
-		if (!tratamientos.isEmpty()) {
 			if (tratamientos.containsKey(medico)) {
 				HashMap<String, Boolean> tratamientosXMedico = tratamientos.get(medico);
 				if (!tratamientosXMedico.containsKey(tratamiento)) {
@@ -28,7 +26,6 @@ public class PacienteAmbulatorio extends Paciente {
 				saldo = saldo + medico.obtenerHonorarios();
 				return true;
 			}
-		}
 		return false;
 	}
 
@@ -42,7 +39,9 @@ public class PacienteAmbulatorio extends Paciente {
 			saldo = 0.0;
 
 		}
-		throw new Exception("No hay atenciones para pagar");
+		else {
+			throw new Exception("No hay atenciones para pagar");
+		}
 	}
 
 }

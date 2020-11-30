@@ -49,9 +49,7 @@ public abstract class Paciente {
 	}
 
 	public Integer obtenerEdad() throws ParseException {
-		LocalDate fechaAux = LocalDate.now();
-		Fecha fechaActual = new Fecha(fechaAux.getDayOfMonth(), fechaAux.getMonthValue(), fechaAux.getYear());
-		return nacimiento.obtenerDias(fechaActual) / 365;
+		return nacimiento.obtenerDias(Fecha.hoy()) / 365;
 	}
 
 	public double obtenerSaldo() {

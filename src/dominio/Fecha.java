@@ -2,6 +2,7 @@ package dominio;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Fecha {
@@ -14,16 +15,6 @@ public class Fecha {
 		this.dia = dia;
 		this.mes = mes;
 		this.anio = anio;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((anio == null) ? 0 : anio.hashCode());
-		result = prime * result + ((dia == null) ? 0 : dia.hashCode());
-		result = prime * result + ((mes == null) ? 0 : mes.hashCode());
-		return result;
 	}
 
 	@Override
@@ -62,6 +53,11 @@ public class Fecha {
 		return str.toString();
 	}
 
+	public static Fecha hoy() {
+		LocalDate fechaAux = LocalDate.now();
+		return new Fecha(fechaAux.getDayOfMonth(), fechaAux.getMonthValue(), fechaAux.getYear());
+	}
+	
 	// lo que hace esto es el this que es la fecha inicial
 	// le resta a la fecha alta que es fecha, en breve entonces vas a hacer
 	// fechaInicial >= fechaAlta

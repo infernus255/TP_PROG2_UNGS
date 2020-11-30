@@ -34,20 +34,22 @@ public class PacienteObraSocial extends Paciente {
 
 	// o(1)
 	public boolean hayInternacionActiva() {
+		if(internaciones.isEmpty()) {
+			return false;
+		}
 		return internaciones.getLast().obtenerFechaAlta() == null;
 	}
 
 	public boolean agregarInternacion(String area, Fecha fechaIngreso, Double importe, Integer nroHabitacion) {
-		if (!internaciones.isEmpty()) {
 			if (!contieneFechaIngreso(fechaIngreso) && !hayInternacionActiva()) {
-				if (area.equals("cardiologia") || area.equals("general") || area.equals("pediatria")) {
+				area=area.toUpperCase();
+				if (area.equals("CARDIOLOGIA") || area.equals("GENERAL") || area.equals("PEDIATRIA")) {
 					Internacion internacion = new Internacion(importe, fechaIngreso, obraSocial, area, descuento,
 							nroHabitacion);
 					internaciones.addLast(internacion);
 					return true;
 				}
 			}
-		}
 		return false;
 	}
 
@@ -75,7 +77,9 @@ public class PacienteObraSocial extends Paciente {
 			}
 			saldo = 0.0;
 		}
-		throw new Exception("No hay atenciones para pagar");
+		else {
+			throw new Exception("No hay atenciones para pagar");
+		}
 	}
 
 	// al pagar hay que dar el alta
