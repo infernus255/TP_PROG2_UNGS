@@ -12,8 +12,12 @@ public class PacienteObraSocial extends Paciente {
 	private LinkedList<Internacion> internaciones;
 
 	public PacienteObraSocial(String nombre, Integer nroHistoriaClinica, Fecha nacimiento, String obraSocial,
-			Double descuento) {
+			Double descuento) throws Exception {
 		super(nombre, nroHistoriaClinica, nacimiento);
+		
+		Validaciones.validarLenghtString(obraSocial, 50, "La obra social debe estar entre 0 y 50 caracteres");
+		Validaciones.validarPorcentaje(descuento, "El descuento debe estar entre 0 y 100 %");
+		
 		this.obraSocial = obraSocial;
 		this.descuento = descuento;
 		internaciones = new LinkedList<Internacion>();
@@ -40,7 +44,7 @@ public class PacienteObraSocial extends Paciente {
 		return internaciones.getLast().obtenerFechaAlta() == null;
 	}
 
-	public boolean agregarInternacion(String area, Fecha fechaIngreso, Double importe, Integer nroHabitacion) {
+	public boolean agregarInternacion(String area, Fecha fechaIngreso, Double importe, Integer nroHabitacion) throws Exception {
 			if (!contieneFechaIngreso(fechaIngreso) && !hayInternacionActiva()) {
 				area=area.toUpperCase();
 				if (area.equals("CARDIOLOGIA") || area.equals("GENERAL") || area.equals("PEDIATRIA")) {
@@ -53,7 +57,7 @@ public class PacienteObraSocial extends Paciente {
 		return false;
 	}
 
-	public boolean darAlta(Fecha fechaAlta) throws ParseException {
+	public boolean darAlta(Fecha fechaAlta) throws Exception {
 		if (!internaciones.isEmpty()) {
 			Internacion ultimaInternacion = internaciones.getLast();
 			if (hayInternacionActiva() && ultimaInternacion.obtenerFechaIngreso().esMayorIgual(fechaAlta)) {
@@ -62,7 +66,7 @@ public class PacienteObraSocial extends Paciente {
 				Double costoAlta = descuento * ultimaInternacion.obtenerFechaIngreso().obtenerDias(fechaAlta)
 						* ultimaInternacion.obtenerImporte();
 				ultimaInternacion.agregarImporte(costoAlta);
-				saldo = saldo + costoAlta;
+				modficarSaldo(saldo + costoAlta);
 				return true;
 			}
 		}
@@ -75,7 +79,7 @@ public class PacienteObraSocial extends Paciente {
 				if (internacion.obtenerFechaAlta() != null)
 					internacion.pagar();
 			}
-			saldo = 0.0;
+			modficarSaldo(0.0);
 		}
 		else {
 			throw new Exception("No hay atenciones para pagar");

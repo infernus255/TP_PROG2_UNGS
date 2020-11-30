@@ -6,23 +6,23 @@ import java.util.Map;
 public class PacientePrivado extends Paciente {
 	private HashMap<Fecha, Atencion> atenciones;
 
-	public PacientePrivado(String nombre, Integer nroHistoriaClinica, Fecha nacimiento) {
+	public PacientePrivado(String nombre, Integer nroHistoriaClinica, Fecha nacimiento) throws Exception {
 		super(nombre, nroHistoriaClinica, nacimiento);
 		atenciones = new HashMap<Fecha, Atencion>();
 	}
 
-	public boolean agregarAtencionConsultorio(Fecha fecha, Medico medico,Double importe) {
+	public boolean agregarAtencionConsultorio(Fecha fecha, Medico medico,Double importe) throws Exception {
 		if (!atenciones.containsKey(fecha)) {
 			Consultorio consulta = new Consultorio(importe, fecha, medico.obtenerNombre(),
 					medico.obtenerEspecialidad());
 			atenciones.put(fecha, consulta);
-			saldo = saldo + consulta.obtenerImporte();
+			modficarSaldo(saldo + consulta.obtenerImporte());
 			return true;
 		}
 		return false;
 	}
 
-	public boolean agregarAtencionGuardia(Fecha fecha) {
+	public boolean agregarAtencionGuardia(Fecha fecha) throws Exception {
 		if (!atenciones.containsKey(fecha)) {
 			Atencion atencion = new Atencion(0.0, fecha);
 			atenciones.put(fecha, atencion);
@@ -55,7 +55,7 @@ public class PacientePrivado extends Paciente {
 			for (Atencion atencion : atenciones.values()) {
 				atencion.pagar();
 			}
-			saldo = 0.0;
+			modficarSaldo(0.0);
 		}
 		else {
 			throw new Exception("No hay atenciones para pagar");

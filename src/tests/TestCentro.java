@@ -58,7 +58,7 @@ public class TestCentro {
 
 	 @Test
 	 public void testSaldoPacientePrivado() throws Exception {
-	  assertEquals(5000,ctro.getSaldo(321),10);
+	  assertEquals(5000.0,ctro.getSaldo(321),10);
 	  ctro.pagarSaldo(321);
 	  assertEquals(0.0,ctro.getSaldo(321),1);
 	 }
@@ -72,9 +72,9 @@ public class TestCentro {
 
 	 @Test
 	 public void testSaldoPacienteAmbulatorio() throws Exception {
-	  assertEquals(27000,ctro.getSaldo(543),10);
+	  assertEquals(27000.0,ctro.getSaldo(543),10);
 	  ctro.pagarSaldo(543);
-	  assertEquals(0,ctro.getSaldo(543),1);
+	  assertEquals(0.0,ctro.getSaldo(543),1);
 	 }
 
 	 @Test

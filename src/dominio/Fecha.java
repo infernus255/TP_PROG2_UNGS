@@ -11,10 +11,15 @@ public class Fecha {
 	Integer mes;
 	Integer anio;
 
-	public Fecha(Integer dia, Integer mes, Integer anio) {
+	public Fecha(Integer dia, Integer mes, Integer anio) throws Exception {
+		if( (dia>0 && dia<32) && (mes>0 && mes<13) && (anio>1920 && anio<2200) ) {
 		this.dia = dia;
 		this.mes = mes;
 		this.anio = anio;
+		}
+		else {
+			throw new Exception("Ingrese una fecha valida");
+		}
 	}
 
 	@Override
@@ -53,7 +58,7 @@ public class Fecha {
 		return str.toString();
 	}
 
-	public static Fecha hoy() {
+	public static Fecha hoy() throws Exception {
 		LocalDate fechaAux = LocalDate.now();
 		return new Fecha(fechaAux.getDayOfMonth(), fechaAux.getMonthValue(), fechaAux.getYear());
 	}
@@ -118,8 +123,37 @@ public class Fecha {
 		int dias = (int) ((fechaFinal.getTime() - fechaInicial.getTime()) / 86400000);
 		return dias;
 	}
+	
+	public boolean esMenorIgual(Fecha fecha) throws ParseException {
+		  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		  StringBuilder fechaInicialStr = new StringBuilder();
+		  fechaInicialStr.append(this.anio);
+		  fechaInicialStr.append("-");
+		  fechaInicialStr.append(this.mes);
+		  fechaInicialStr.append("-");
+		  fechaInicialStr.append(this.dia);
 
-	public static void main(String[] args) {
+		  StringBuilder fechaFinalStr = new StringBuilder();
+		  fechaFinalStr.append(fecha.anio);
+		  fechaFinalStr.append("-");
+		  fechaFinalStr.append(fecha.mes);
+		  fechaFinalStr.append("-");
+		  fechaFinalStr.append(fecha.dia);
+		  Date fechaInicial = new Date();
+		  Date fechaFinal = new Date();
+
+		  fechaInicial = dateFormat.parse(fechaInicialStr.toString());
+		  fechaFinal = dateFormat.parse(fechaFinalStr.toString());
+
+		  int dias = (int) ((fechaFinal.getTime() - fechaInicial.getTime()) / 86400000);
+		  if (dias <= 0) {
+		   return true;
+		  } else {
+		   return false;
+		  }
+		 }
+
+	public static void main(String[] args) throws Exception {
 		Fecha nueva = new Fecha(10, 02, 2020);
 		if (nueva.getClass().getSimpleName().equals("Fecha")) {
 			System.out.println(nueva.getClass().getSimpleName());

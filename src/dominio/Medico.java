@@ -7,7 +7,12 @@ public class Medico {
 	private Double honorarios;
 	private String especialidad;
 
-	public Medico(String nombre, Integer nroMatricula, String especialidad, Double honorarios) {
+	public Medico(String nombre, Integer nroMatricula, String especialidad, Double honorarios) throws Exception {
+		Validaciones.validarLenghtString(nombre, 50, "El nombre del medico debe ser mayor a 0 y menor a 50");
+		Validaciones.validarNumeroPositivo(nroMatricula);
+		Validaciones.validarLenghtString(especialidad, 50, "La especialidad debe ser mayor a 0 y menor a 50");
+		Validaciones.validarPrecio(honorarios,100000.0, "Los honorarios deben ser mayor iguales a 0 y menores a 100000");
+		
 		this.nombre = nombre;
 		this.nroMatricula = nroMatricula;
 		this.especialidad = especialidad;

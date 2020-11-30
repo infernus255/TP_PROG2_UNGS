@@ -32,7 +32,10 @@ public abstract class Paciente {
 		return true;
 	}
 
-	public Paciente(String nombre, Integer nroHistoriaClinica, Fecha nacimiento) {
+	public Paciente(String nombre, Integer nroHistoriaClinica, Fecha nacimiento) throws Exception {
+		Validaciones.validarNumeroPositivo(nroHistoriaClinica);
+		Validaciones.validarLenghtString(nombre, 50, "Ingrese un nombre de paciente entre 0 y 50");
+		
 		this.nroHistoriaClinica = nroHistoriaClinica;
 		this.nacimiento = nacimiento;
 		this.nombre = nombre;
@@ -48,12 +51,17 @@ public abstract class Paciente {
 		return nacimiento;
 	}
 
-	public Integer obtenerEdad() throws ParseException {
+	public Integer obtenerEdad() throws Exception {
 		return nacimiento.obtenerDias(Fecha.hoy()) / 365;
 	}
 
 	public double obtenerSaldo() {
 		return saldo;
+	}
+	
+	protected void modficarSaldo(Double saldo) throws Exception {
+		Validaciones.validarPrecio(saldo, 1000000.0, "El saldo debe estar entre 0 y 1000000");
+		this.saldo=saldo;
 	}
 
 	public abstract void pagarSaldo() throws Exception;
